@@ -85,7 +85,6 @@
     "../node_modules/@nuxt/telemetry/node_modules",
     "../dist",
     "../.data",
-    "../Frontend/**/*",
     "../modules/*/runtime/**/*",
     "../layers/*/app/**/*",
     "../layers/*/modules/*/runtime/**/*",

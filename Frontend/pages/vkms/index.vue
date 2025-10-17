@@ -82,9 +82,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'; 
 // AANGENOMEN: tags: string[] is toegevoegd aan VkmItemData
-import type { VkmItemData } from "@backend/server/types/vkm";
-import { useLocale } from '@/composables/UseLocale';
-import { useUserSelection } from '@/composables/UseUserSelection';
+import type { VkmItemData } from "~/Backend/server/types/vkm";
+import { useLocale } from '~/Frontend/composables/UseLocale';
+import { useUserSelection } from '~/Frontend/composables/UseUserSelection';
 
 import '~/assets/css/pages/vkms-list.css'; 
 

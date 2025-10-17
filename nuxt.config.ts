@@ -4,18 +4,25 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
-  // Stel de source directory in op Frontend
-  srcDir: 'Frontend/',
 
-  // CSS-bestanden (relatief aan srcDir)
+  // Vite aliases zodat Frontend map gevonden wordt
+  vite: {
+    resolve: {
+      alias: {
+        '@frontend': '/Frontend'
+      }
+    }
+  },
+
+  // CSS-bestanden via alias
   css: [
-    '@/assets/css/main.css'
+    '/assets/css/main.css'
   ],
 
   runtimeConfig: {
-    MONGODB_URI: process.env.MONGODB_URI, 
+    MONGODB_URI: process.env.MONGODB_URI,
     public: {
       // eventueel publieke runtime variabelen
     }
-  },
+  }
 })
