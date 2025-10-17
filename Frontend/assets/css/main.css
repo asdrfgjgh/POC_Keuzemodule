@@ -1,0 +1,83 @@
+/* assets/css/main.css */
+
+/* --- 1. CSS Reset en Basisinstellingen --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box; /* Zorgt ervoor dat padding/border niet de totale breedte verandert */
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Definieer je kleuren als CSS-variabelen */
+    --color-primary: #10b981; /* Groen (VKM-kleur) */
+    --color-secondary: #064e3b; /* Donkergroen */
+    --color-text-dark: #333333;
+    --color-text-light: #ffffff;
+    --color-background-light: #f4f4f9; /* Lichtgrijze achtergrond */
+    --color-error: #dc2626; /* Rood */
+    --color-warning: #d97706; /* Oranje/geel */
+    
+    --font-family-base: Arial, sans-serif;
+}
+
+/* --- 2. Basis Body Stijlen --- */
+/* Deze stijlen worden nu globaal geladen en overschrijven de browser defaults */
+body {
+    font-family: var(--font-family-base);
+    background-color: var(--color-background-light);
+    color: var(--color-text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* --- 3. Typografie en Links --- */
+h1, h2, h3 {
+    color: var(--color-secondary);
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.6em; }
+h3 { font-size: 1.3em; }
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+/* --- 4. Globale Component Stijlen --- */
+
+/* Knop Standaardstijl (voor eventuele toekomstige knoppen) */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-secondary);
+}
+
+/* Stijl voor foutmeldingen (zoals op de detailpagina) */
+.error-message {
+    border: 1px solid var(--color-error);
+    background-color: color-mix(in srgb, var(--color-error) 10%, transparent); /* Lichtrode achtergrond */
+    color: var(--color-error);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+}

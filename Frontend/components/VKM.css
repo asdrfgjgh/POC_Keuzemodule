@@ -1,0 +1,156 @@
+.hero-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  display: flex;
+  flex: 1;
+}
+
+.hero-content {
+  padding: 24px;
+}
+
+.hero-image {
+  padding: 24px;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.p3 {
+  background-color: #e6d5ff;
+  color: #6b21a8;
+}
+
+.ects {
+  background-color: #e6d5ff;
+  color: #6b21a8;
+}
+
+.nl {
+  background-color: #e6d5ff;
+  color: #6b21a8;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background-color: #6b21a8;
+  width: fit-content;
+}
+
+.course-info {
+  margin-bottom: 24px;
+}
+
+.course-code {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.course-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.course-description {
+  color: #4a4a4a;
+  line-height: 1.5;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.info-button {
+  padding: 8px 24px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.enroll-button {
+  padding: 8px 24px;
+  background-color: white;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.favorite-button {
+  padding: 8px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.home-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #10b981; /* Nuxt groen */
+  margin-bottom: 20px;
+}
+
+.vkm-link-button {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 10px 20px;
+  background-color: #3b82f6; /* Blauwe knop */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.vkm-link-button:hover {
+  background-color: #2563eb;
+}

@@ -1,0 +1,32 @@
+.vkms-container {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+}
+h1 {
+color: #10b981;
+margin-bottom: 30px;
+}
+.vkm-grid {
+    /* Optioneel: voeg hier een grid of flex container stijl toe */
+    display: grid;
+    gap: 20px;
+}
+.search-bar {
+  padding: 1rem 0;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Zorgt ervoor dat padding en border binnen de breedte vallen */
+}
+
+.search-input:focus {
+  border-color: #007bff; /* Een focus kleur voor betere UX */
+  outline: none;
+}
