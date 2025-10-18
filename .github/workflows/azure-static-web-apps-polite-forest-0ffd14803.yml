@@ -56,5 +56,3 @@ jobs:
           package: app.zip
 
       # ➡️ Optionele stap: Logout na deployment
-      - name: Azure Logout
-        uses: azure/logout@v1
