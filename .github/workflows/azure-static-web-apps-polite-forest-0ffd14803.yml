@@ -11,12 +11,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: "keuzemodule-frontend"
-  # FIX: Verhoog de Node.js versie naar 20.x, vereist door Nuxt/Vite packages.
   NODE_VERSION: "20.x"
-  # Backend naam voor de CORS configuratie job
-  AZURE_BACKEND_NAME: "apijobbahub"
-  # URL van de SWA, afgeleid van de AZURE_WEBAPP_NAME
-  FRONTEND_URL: "https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
 
 jobs:
   build-and-deploy:
@@ -37,20 +32,17 @@ jobs:
         run: npm ci
 
       - name: Build application
-        run: |
-          npm run build
+        run: npm run build
         env:
-          # Deze BACKEND_URL wordt gebruikt door je Nuxt build, let op: geen slash aan het einde.
-          BACKEND_URL: "https://${{ env.AZURE_BACKEND_NAME }}.azurewebsites.net"
-          API_BASE_URL: "https://${{ env.AZURE_BACKEND_NAME }}.azurewebsites.net/api"
+          BACKEND_URL: "https://apijobbahub.azurewebsites.net"
+          API_BASE_URL: "https://apijobbahub.azurewebsites.net/api"
 
       - name: Create deployment package
-        # Veronderstelt dat .output de correcte build-output map is voor je Nuxt project.
-        run: |
-          zip -r app.zip .output -x "*.map"
+        run: zip -r app.zip .output -x "*.map"
 
-      # FIX: Azure Login toevoegen (vereist door webapps-deploy actie)
-      - name: Azure Login for Deployment
+      # ➡️ NIEUWE STAP: Azure Login met Service Principal
+      # Je moet het 'AZURE_CREDENTIALS' secret aanmaken in GitHub.
+      - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -58,31 +50,11 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          # VASTE WAARDE: Dit omzeilt de 'Unrecognized named-value: env' fout op regel 19.
-          app-name: "keuzemodule-frontend"
-          # OF, probeer nogmaals: app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          # ⚠️ VERWIJDER DE PUBLISH PROFILE LIJN en vertrouw op de login stap
+          # publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} # NIET MEER NODIG
           package: app.zip
 
-  # ----------------------------------------------------------------------------------------------------------------------
-
-  configure-cors:
-    runs-on: ubuntu-latest
-    name: Configure CORS
-    needs: build-and-deploy
-    if: success()
-
-    steps:
-      - name: Azure Login for CORS Configuration
-        uses: azure/login@v1
-        with:
-          # Gebruik de Service Principal credentials (JSON)
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Configure CORS for backend (apijobbahub)
-        run: |
-          # Voeg de frontend URL toe aan de toegestane origins van de backend API.
-          az webapp cors add \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name ${{ env.AZURE_BACKEND_NAME }} \
-            --allowed-origins ${{ env.FRONTEND_URL }}
+      # ➡️ Optionele stap: Logout na deployment
+      - name: Azure Logout
+        uses: azure/logout@v1
