@@ -269,3 +269,4 @@ node --version
 3. **Configureer GitHub secrets**
 4. **Test deployment** door code te pushen
 5. **Monitor logs** voor eventuele problemen
+
