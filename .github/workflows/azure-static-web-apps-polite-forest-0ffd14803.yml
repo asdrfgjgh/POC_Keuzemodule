@@ -1,4 +1,4 @@
-name: Build and Deploy to Azure App Service
+name: Azure Static Web Apps CI/CD
 
 on:
   push:
@@ -9,50 +9,37 @@ on:
     branches:
       - main
 
-env:
-  AZURE_WEBAPP_NAME: "keuzemodule-frontend"
-  NODE_VERSION: "20.x"
-
 jobs:
-  build-and-deploy:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    name: Build and Deploy Frontend
-    environment: "production"
-
+    name: Build and Deploy Job
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run build
-        env:
-          BACKEND_URL: "https://apijobbahub.azurewebsites.net"
-          API_BASE_URL: "https://apijobbahub.azurewebsites.net/api"
-
-      - name: Create deployment package
-        run: zip -r app.zip .output -x "*.map"
-
-      # ➡️ NIEUWE STAP: Azure Login met Service Principal
-      # Je moet het 'AZURE_CREDENTIALS' secret aanmaken in GitHub.
-      - name: Azure Login
-        uses: azure/login@v1
+          submodules: true
+          lfs: false
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          app_location: "./Proof-Of-Concept" # App source code path
+          api_location: "" # Api source code path - optional
+          output_location: "dist" # Built app content directory - optional
+        env: # <--- VOEG DEZE SECTIE TOE
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          # ⚠️ VERWIJDER DE PUBLISH PROFILE LIJN en vertrouw op de login stap
-          # publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} # NIET MEER NODIG
-          package: app.zip
-
-      # ➡️ Optionele stap: Logout na deployment
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN}}
+          action: "close"
