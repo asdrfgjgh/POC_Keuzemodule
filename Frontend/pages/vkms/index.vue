@@ -82,9 +82,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'; 
 // AANGENOMEN: tags: string[] is toegevoegd aan VkmItemData
-import type { VkmItemData } from "~/Backend/server/types/vkm";
-import { useLocale } from '~/Frontend/composables/UseLocale';
-import { useUserSelection } from '~/Frontend/composables/UseUserSelection';
+import type { VkmItemData } from "~/../Backend/server/types/vkm";
+import { useLocale } from '~/composables/UseLocale';
+import { useUserSelection } from '~/composables/UseUserSelection';
 
 import '~/assets/css/pages/vkms-list.css'; 
 
@@ -116,7 +116,13 @@ const {
 } = await useFetch<VkmItemData[]>('/api/vkms');
 
 // 2. Computed Property voor Veiligheid (originele data)
-const vkms = computed(() => data.value ?? []);
+const vkms = computed(() => {
+  // Extra veiligheidscheck: zorg ervoor dat we altijd een array hebben
+  if (!data.value || !Array.isArray(data.value)) {
+    return [];
+  }
+  return data.value;
+});
 
 // --- FUNCTIE: FAVORIETEN OPHALEN ---
 const fetchFavorites = async () => {
@@ -143,11 +149,13 @@ await fetchFavorites();
 
 // --- DYNAMISCHE FILTERS OPHALEN UIT DE DATA ---
 const uniqueLevels = computed(() => {
+  if (!Array.isArray(vkms.value)) return [];
   const levels = new Set(vkms.value.map(item => item.level).filter(Boolean));
   return Array.from(levels).sort(); 
 });
 
 const uniqueCredits = computed(() => {
+  if (!Array.isArray(vkms.value)) return [];
   const credits = new Set(vkms.value.map(item => item.studycredit).filter(Boolean));
   
   return Array.from(credits).sort((a, b) => 
@@ -157,6 +165,7 @@ const uniqueCredits = computed(() => {
 
 // ⭐️ NIEUW: Computed Property voor unieke tags
 const uniqueTags = computed(() => {
+  if (!Array.isArray(vkms.value)) return [];
   const tags = new Set<string>();
   vkms.value.forEach(item => {
     // Aangenomen dat item.tags een array van strings is.
@@ -172,6 +181,7 @@ const uniqueTags = computed(() => {
 
 // 4. COMPUTED PROPERTY: Filter de VKM's EN voeg de 'isFavorite' status toe
 const filteredVkms = computed((): VkmItemDataWithFavoriteStatus[] => {
+  if (!Array.isArray(vkms.value)) return [];
   let currentVkms = vkms.value;
   
   // Eerst filters toepassen

@@ -47,16 +47,16 @@
         "../node_modules/vite/client"
       ],
       "~": [
-        ".."
+        "../Frontend"
       ],
       "~/*": [
-        "../*"
+        "../Frontend/*"
       ],
       "@": [
-        ".."
+        "../Frontend"
       ],
       "@/*": [
-        "../*"
+        "../Frontend/*"
       ],
       "~~": [
         ".."
@@ -137,7 +137,7 @@
   },
   "include": [
     "./nuxt.d.ts",
-    "../**/*",
+    "../Frontend/**/*",
     "../modules/*/runtime/**/*",
     "../layers/*/app/**/*",
     "../layers/*/modules/*/runtime/**/*",

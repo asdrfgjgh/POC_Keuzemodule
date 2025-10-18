@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import type { VkmItemData } from "~/Backend/server/types/vkm";
+import type { VkmItemData } from "~/../Backend/server/types/vkm";
 import { computed } from "vue"; 
 
 const emit = defineEmits(["moreInfo", "toggleFavorite"]);

@@ -12,7 +12,9 @@
 "preview": "nuxt preview",
 "start": "node .output/server/index.mjs",
 "postinstall": "nuxt prepare",
-"seed:tags": "ts-node -P ./tsconfig.json -r tsconfig-paths/register ./server/scripts/tagger.ts"
+"seed:tags": "ts-node -P ./tsconfig.json -r tsconfig-paths/register ./server/scripts/tagger.ts",
+"deploy:frontend": "npm run build && npm run start",
+"deploy:backend": "npm run build && npm run start"
 },
 "dependencies": {
 "mongoose": "^8.19.0",

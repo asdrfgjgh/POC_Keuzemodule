@@ -1,29 +1,36 @@
-// ~/server/models/User.js (Het AANGEPASTE bestand)
+// ~/server/models/User.ts
 
-import pkg from 'mongoose'; 
-const { Schema, model, models } = pkg; 
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 // 1. AANGEPASTE INTERFACE
-export interface IUser extends pkg.Document { // Gebruik pkg.Document i.p.v. mongoose.Document
+export interface IUser extends Document {
   name: string;
   studentNumber: string;
-  // ✅ TOEGEVOEGD: Het favorietenveld
   favoriteModules: string[]; 
 }
 
 // 2. AANGEPAST SCHEMA
-const UserSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  studentNumber: { type: String, required: true, unique: true },
-  
-  // ✅ TOEGEVOEGD: Definitie van de array
-  favoriteModules: { 
-    type: [String], // Array van strings
-    default: []     // Zorg dat het altijd bestaat
+const UserSchema: Schema<IUser> = new Schema({
+  name: { 
+    type: String, 
+    required: true 
   },
+  studentNumber: { 
+    type: String, 
+    required: true, 
+    unique: true 
+  },
+  favoriteModules: { 
+    type: [String], 
+    default: []     
+  },
+}, {
+  timestamps: true
 });
 
-// 3. MODEL CREATIE (Gebruik de gedestructureerde 'models' en 'model')
-const UserModel = models.User || model<IUser>('User', UserSchema);
+// 3. MODEL CREATIE
+export const UserModel: Model<IUser> = 
+  (mongoose.models.User as Model<IUser>) || 
+  mongoose.model<IUser>('User', UserSchema);
 
 export default UserModel;

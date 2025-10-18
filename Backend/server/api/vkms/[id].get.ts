@@ -1,13 +1,13 @@
 // /server/api/vkms/[id].ts
 
-import connectDB from '~/Backend/server/utils/db';
-import VkmModel from '~/Backend/server/models/Vkm'; 
+import connectDB from '../../utils/db';
+import VkmModel from '../../models/Vkm'; 
 import type { Model } from 'mongoose';
 import { setResponseStatus } from 'h3';
 
 // ⭐️ AANNAMEN: Importeer de TagModel 
 // Pas het pad aan indien nodig
-import { TagModel } from '~/Backend/server/models/Tag'; 
+import { TagModel } from '../../models/Tag'; 
 
 
 // ⭐️ NIEUW TYPE: Bijgewerkte interface om de structuur vast te leggen

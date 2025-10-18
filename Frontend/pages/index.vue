@@ -17,5 +17,5 @@ useHead({
 </script>
 
 <style scoped>
-@import "@/components/VKM.css";
+@import "~/components/VKM.css";
 </style>   

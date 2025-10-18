@@ -1,0 +1,85 @@
+# Azure DevOps Pipeline voor Frontend + Backend deployment (Zonder Docker)
+trigger:
+  - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  azureServiceConnectionId: "your-service-connection-id"
+  webAppName: "keuzemodule"
+  resourceGroupName: "keuzemodule-rg"
+
+stages:
+  - stage: Build
+    displayName: "Build Stage"
+    jobs:
+      - job: BuildAndDeploy
+        displayName: "Build and Deploy Full Stack"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "18.x"
+            displayName: "Install Node.js"
+
+          - script: |
+              npm install
+              npm run build
+            displayName: "Build Application"
+            workingDirectory: "$(System.DefaultWorkingDirectory)"
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+              includeRootFolder: false
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/app.zip"
+            displayName: "Create deployment package"
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: "$(Build.ArtifactStagingDirectory)"
+              artifactName: "app"
+
+  - stage: Deploy
+    displayName: "Deploy Stage"
+    dependsOn: Build
+    jobs:
+      - deployment: DeployFrontend
+        displayName: "Deploy Frontend"
+        environment: "production"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: "$(azureServiceConnectionId)"
+                    appType: "webApp"
+                    appName: "$(webAppName)-frontend"
+                    package: "$(Pipeline.Workspace)/app/app.zip"
+                    appSettings: |
+                      -NODE_ENV production
+                      -PORT 3000
+                      -WEBSITE_NODE_DEFAULT_VERSION 18.17.0
+
+      - deployment: DeployBackend
+        displayName: "Deploy Backend"
+        environment: "production"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: "$(azureServiceConnectionId)"
+                    appType: "webApp"
+                    appName: "$(webAppName)-backend"
+                    package: "$(Pipeline.Workspace)/app/app.zip"
+                    appSettings: |
+                      -NODE_ENV production
+                      -PORT 3000
+                      -WEBSITE_NODE_DEFAULT_VERSION 18.17.0
+                      -MONGODB_URI "$(MONGODB_URI)"

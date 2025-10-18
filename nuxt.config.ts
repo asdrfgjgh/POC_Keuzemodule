@@ -4,6 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
+  // Configureer de source directory naar Frontend
+  srcDir: 'Frontend/',
+
+  // Configureer server directory naar Backend
+  serverDir: 'Backend/server/',
 
   // Vite aliases zodat Frontend map gevonden wordt
   vite: {

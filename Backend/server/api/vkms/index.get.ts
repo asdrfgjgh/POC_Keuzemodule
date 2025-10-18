@@ -1,12 +1,12 @@
 // /server/api/vkms.ts
 
-import connectDB from '~/Backend/server/utils/db';
+import connectDB from '../../utils/db';
 import type { Model } from 'mongoose';
-import VkmModel from '~/Backend/server/models/Vkm';
+import VkmModel from '../../models/Vkm';
 
 // ⭐️ AANNAMEN: Importeer de TagModel die je eerder hebt gedefinieerd
 // Pas het pad aan indien nodig
-import { TagModel } from '~/Backend/server/models/Tag'; 
+import { TagModel } from '../../models/Tag'; 
 
 export default defineEventHandler(async (event) => {
   console.log('>>> API ROUTE /api/vkms GESTART <<<');

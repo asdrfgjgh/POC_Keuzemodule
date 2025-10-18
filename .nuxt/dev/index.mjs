@@ -5,6 +5,7 @@ import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getResponseStatusText } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/h3/dist/index.mjs';
 import { escapeHtml } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/@vue/shared/dist/shared.cjs.js';
+import mongoose, { Schema } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/mongoose/index.js';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/ufo/dist/index.mjs';
 import destr, { destr as destr$1 } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/destr/dist/index.mjs';
@@ -35,7 +36,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname as dirname$1, resolve as resolve$1 } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/pathe/dist/index.mjs';
 import { walkResolver } from 'file://C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/unhead/dist/utils.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"C:/Users/Tingp/GitHub/POC_Keuzemodule/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"C:/Users/Tingp/GitHub/POC_Keuzemodule/Backend/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -48,7 +49,7 @@ const storage = createStorage({});
 storage.mount('/assets', assets$1);
 
 storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/Tingp/GitHub/POC_Keuzemodule","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/Tingp/GitHub/POC_Keuzemodule/server","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/Tingp/GitHub/POC_Keuzemodule/Backend/server","watchOptions":{"ignored":[null]}}));
 storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/Tingp/GitHub/POC_Keuzemodule/.nuxt"}));
 storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/Tingp/GitHub/POC_Keuzemodule/.nuxt/cache"}));
 storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/Users/Tingp/GitHub/POC_Keuzemodule/.data/kv"}));
@@ -647,7 +648,7 @@ const _inlineRuntimeConfig = {
     }
   },
   "public": {},
-  "MONGODB_URI": ""
+  "MONGODB_URI": "mongodb+srv://Test:Test@testavans.jege5jk.mongodb.net/Avans"
 };
 const envOptions = {
   prefix: "NITRO_",
@@ -693,9 +694,9 @@ new Proxy(/* @__PURE__ */ Object.create(null), {
   }
 });
 
-const config = useRuntimeConfig();
+const config$1 = useRuntimeConfig();
 const _routeRulesMatcher = toRouteMatcher(
-  createRouter({ routes: config.nitro.routeRules })
+  createRouter({ routes: config$1.nitro.routeRules })
 );
 function createRouteRulesHandler(ctx) {
   return eventHandler((event) => {
@@ -1115,7 +1116,22 @@ const plugins = [
 _lSmG_M0iYRwD0ZA39O9LVvTAzCVbDjmhGX07tlG7NFs
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"15174-WpeO8Kyu5EZdXijpLCuqTA9axJ8\"",
+    "mtime": "2025-10-18T10:31:56.073Z",
+    "size": 86388,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"4e854-KMroitFuUi/INDBtYYZWnNCb83g\"",
+    "mtime": "2025-10-18T10:31:56.073Z",
+    "size": 321620,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1522,10 +1538,20 @@ async function getIslandContext(event) {
   return ctx;
 }
 
+const _lazy_CNue6c = () => Promise.resolve().then(function () { return _id__get$3; });
+const _lazy_fWZkjr = () => Promise.resolve().then(function () { return favorite_patch$1; });
+const _lazy_1uhCzM = () => Promise.resolve().then(function () { return index_get$3; });
+const _lazy_yrdhC0 = () => Promise.resolve().then(function () { return _id__get$1; });
+const _lazy_pxmOba = () => Promise.resolve().then(function () { return index_get$1; });
 const _lazy_wxe6ao = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
   { route: '', handler: _gAuTSU, lazy: false, middleware: true, method: undefined },
+  { route: '/api/users/:id', handler: _lazy_CNue6c, lazy: true, middleware: false, method: "get" },
+  { route: '/api/users/:id/favorite', handler: _lazy_fWZkjr, lazy: true, middleware: false, method: "patch" },
+  { route: '/api/users', handler: _lazy_1uhCzM, lazy: true, middleware: false, method: "get" },
+  { route: '/api/vkms/:id', handler: _lazy_yrdhC0, lazy: true, middleware: false, method: "get" },
+  { route: '/api/vkms', handler: _lazy_pxmOba, lazy: true, middleware: false, method: "get" },
   { route: '/__nuxt_error', handler: _lazy_wxe6ao, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_wxe6ao, lazy: true, middleware: false, method: undefined }
@@ -1864,6 +1890,330 @@ const styles = {};
 const styles$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: styles
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const config = useRuntimeConfig();
+let uri = config.MONGODB_URI;
+console.log("[connectDB] Opgehaalde MONGODB_URI:", uri);
+let isConnected = false;
+async function connectDB() {
+  console.log("[connectDB] connectDB() aangeroepen");
+  if (!uri) {
+    console.error("[connectDB] FATALE FOUT: MongoDB URI is niet gedefinieerd in runtimeConfig. Controleer .env en nuxt.config.ts.");
+    return;
+  }
+  if (isConnected) {
+    console.log("[connectDB] => Gebruikt bestaande database verbinding");
+    return;
+  }
+  try {
+    console.log("[connectDB] Probeer verbinding te maken met MongoDB...");
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 5e3
+    });
+    isConnected = true;
+    console.log("[connectDB] => Nieuwe database verbinding gemaakt!");
+  } catch (error) {
+    console.error("[connectDB] Fout bij het verbinden met MongoDB:", error);
+    if (process) {
+      process.exit(1);
+    }
+  }
+}
+
+const UserSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  studentNumber: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  favoriteModules: {
+    type: [String],
+    default: []
+  }
+}, {
+  timestamps: true
+});
+const UserModel = mongoose.models.User || mongoose.model("User", UserSchema);
+
+const _id__get$2 = defineEventHandler(async (event) => {
+  var _a;
+  const userId = (_a = event.context.params) == null ? void 0 : _a.id;
+  if (!userId) {
+    setResponseStatus(event, 400);
+    return { error: "User ID ontbreekt." };
+  }
+  try {
+    await connectDB();
+    const User = UserModel;
+    const user = await User.findById(userId).lean();
+    if (!user) {
+      setResponseStatus(event, 404);
+      return { error: "Gebruiker niet gevonden." };
+    }
+    return {
+      _id: user._id || userId,
+      name: user.name || "Onbekende gebruiker",
+      studentNumber: user.studentNumber || "N/A",
+      favoriteModules: Array.isArray(user.favoriteModules) ? user.favoriteModules : []
+    };
+  } catch (error) {
+    console.error(`Fout bij ophalen van gebruiker ${userId}:`, error);
+    setResponseStatus(event, 500);
+    return {
+      error: "Kon de gebruiker niet ophalen.",
+      details: error.message
+    };
+  }
+});
+
+const _id__get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _id__get$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const favorite_patch = defineEventHandler(async (event) => {
+  var _a;
+  const userId = (_a = event.context.params) == null ? void 0 : _a.id;
+  if (!userId) {
+    setResponseStatus(event, 400);
+    return { error: "User ID ontbreekt." };
+  }
+  try {
+    await connectDB();
+    const User = UserModel;
+    const body = await readBody(event);
+    const { moduleId } = body;
+    if (!moduleId) {
+      setResponseStatus(event, 400);
+      return { error: "Module ID ontbreekt in request body." };
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      setResponseStatus(event, 404);
+      return { error: "Gebruiker niet gevonden." };
+    }
+    if (!Array.isArray(user.favoriteModules)) {
+      user.favoriteModules = [];
+    }
+    const isFavorite = user.favoriteModules.includes(moduleId);
+    if (isFavorite) {
+      user.favoriteModules = user.favoriteModules.filter((id) => id !== moduleId);
+    } else {
+      user.favoriteModules.push(moduleId);
+    }
+    await user.save();
+    return {
+      message: isFavorite ? "Favoriet verwijderd" : "Favoriet toegevoegd",
+      isNowFavorite: !isFavorite,
+      user: {
+        name: user.name || "Onbekende gebruiker",
+        favoriteModules: user.favoriteModules
+      }
+    };
+  } catch (error) {
+    console.error(`Fout bij togglen van favoriet voor gebruiker ${userId}:`, error);
+    setResponseStatus(event, 500);
+    return {
+      error: "Kon de favoriet niet togglen.",
+      details: error.message
+    };
+  }
+});
+
+const favorite_patch$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: favorite_patch
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get$2 = defineEventHandler(async (event) => {
+  console.log(">>> API ROUTE /api/users GESTART <<<");
+  try {
+    console.log("[API] Voor connectDB()");
+    await connectDB();
+    console.log("[API] Na connectDB()");
+    const User = UserModel;
+    const users = await User.find({}).lean();
+    console.log("[API] Users opgehaald:", users.length);
+    const safeUsers = users.map((user) => ({
+      _id: user._id || "unknown",
+      name: user.name || "Onbekende gebruiker",
+      studentNumber: user.studentNumber || "N/A",
+      favoriteModules: Array.isArray(user.favoriteModules) ? user.favoriteModules : []
+    }));
+    return safeUsers;
+  } catch (error) {
+    console.error("[API] Fout bij ophalen van users uit MongoDB:", error);
+    setResponseStatus(event, 500);
+    return {
+      error: "Kon de user data niet ophalen uit de database.",
+      details: error.message
+    };
+  }
+});
+
+const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const VkmSchema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+    unique: true
+  },
+  // ⭐ AANPASSING: Het veld is nu name en map direct naar de DB. De alias is verwijderd.
+  name: {
+    type: String,
+    required: false
+    // Zet op false om modules met lege namen niet over te slaan
+  },
+  description: {
+    type: String,
+    required: false
+    // Gezet op false voor flexibiliteit met ontbrekende data
+  },
+  shortdescription: {
+    type: String,
+    required: false
+    // Gezet op false voor flexibiliteit met ontbrekende data
+  },
+  // ⭐ FIX 2: Map 'credits' naar het databaseveld 'studycredit' (Deze alias laten we staan)
+  credits: {
+    type: String,
+    default: "0 EC",
+    alias: "studycredit"
+    // Mongoose zal 'studycredit' gebruiken voor dit veld.
+  },
+  level: {
+    type: String,
+    default: "N/A"
+  },
+  imageSrc: {
+    type: String,
+    default: "https://picsum.photos/id/10/300/200"
+  },
+  learningoutcomes: {
+    type: [String],
+    // Array van strings
+    default: []
+  },
+  tags: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tag"
+  }]
+}, {
+  timestamps: true,
+  // De virtuele properties blijven nodig voor de 'credits' alias.
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
+});
+const VkmModel = mongoose.models.Vkm || mongoose.model("Vkm", VkmSchema);
+
+const TagSchema = new Schema({
+  // De naam van de tag (bijv. 'Psychologie', 'Duurzaamheid')
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    // Zorgt ervoor dat elke tagnaam uniek is
+    trim: true
+  }
+  // Optioneel: Tijdstempels voor aanmaak- en bewerkingsdatum
+}, { timestamps: true });
+const TagModel = mongoose.model("Tag", TagSchema);
+
+const _id__get = defineEventHandler(async (event) => {
+  var _a, _b;
+  const moduleId = (_a = event.context.params) == null ? void 0 : _a.id;
+  if (!moduleId) {
+    setResponseStatus(event, 400);
+    return { error: "Module ID ontbreekt." };
+  }
+  try {
+    await connectDB();
+    const Vkm = VkmModel;
+    const vkmResult = await Vkm.findOne({ id: moduleId }).populate({
+      path: "tags",
+      // Veld in Vkm document dat de Tag ID's bevat
+      model: TagModel,
+      // Model om op te zoeken
+      select: "name"
+      // Haal alleen de naam op
+    }).lean();
+    if (!vkmResult) {
+      setResponseStatus(event, 404);
+      return { error: "Module niet gevonden." };
+    }
+    const vkm = vkmResult;
+    const tagNames = Array.isArray(vkm.tags) ? vkm.tags.map((tag) => tag.name) : [];
+    const transformedVkm = {
+      ...vkm,
+      // EC/Studycredit mapping
+      ec: (_b = vkm.studycredit) != null ? _b : 0,
+      // ⭐️ Tags mapping
+      tags: tagNames
+      // Dit is nu een array van strings (namen)
+    };
+    return transformedVkm;
+  } catch (error) {
+    console.error(`Fout bij ophalen van VKM met ID ${moduleId}:`, error);
+    setResponseStatus(event, 500);
+    return {
+      error: "Kon de gevraagde module niet ophalen uit de database.",
+      details: error.message
+    };
+  }
+});
+
+const _id__get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _id__get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get = defineEventHandler(async (event) => {
+  console.log(">>> API ROUTE /api/vkms GESTART <<<");
+  try {
+    console.log("[API] Voor connectDB()");
+    await connectDB();
+    console.log("[API] Na connectDB()");
+    const vkm = VkmModel;
+    const vkmsWithPopulatedTags = await vkm.find({}).populate({
+      path: "tags",
+      // Dit is het veld in het Vkm document dat de ID's bevat
+      model: TagModel,
+      // Dit is het Model dat gebruikt moet worden om de ID's op te zoeken
+      select: "name"
+      // ⭐️ OPTIONEEL: Selecteer enkel het 'name' veld van de Tag, om dataverkeer te beperken
+    }).lean();
+    console.log("[API] VKMs opgehaald en tags gepopuleerd:", vkmsWithPopulatedTags.length);
+    const transformedVkms = vkmsWithPopulatedTags.map((item) => {
+      const tagNames = Array.isArray(item.tags) ? item.tags.map((tag) => tag.name) : [];
+      return {
+        ...item,
+        tags: tagNames
+        // Dit is nu een array van strings (namen) i.p.v. ID's of objecten
+      };
+    });
+    return transformedVkms;
+  } catch (error) {
+    console.error("[API] Fout bij ophalen/populeren van VKMs uit MongoDB:", error);
+    setResponseStatus(event, 500);
+    return {
+      error: "Kon de VKM data niet ophalen uit de database.",
+      details: error.message
+    };
+  }
+});
+
+const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function renderPayloadResponse(ssrContext) {
