@@ -56,16 +56,16 @@
         "../node_modules/vite/client"
       ],
       "~": [
-        "../Frontend"
+        ".."
       ],
       "~/*": [
-        "../Frontend/*"
+        "../*"
       ],
       "@": [
-        "../Frontend"
+        ".."
       ],
       "@/*": [
-        "../Frontend/*"
+        "../*"
       ],
       "~~": [
         ".."

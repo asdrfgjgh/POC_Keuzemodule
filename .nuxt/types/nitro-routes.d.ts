@@ -3,26 +3,11 @@ import type { Serialize, Simplify } from "nitropack/types";
 declare module "nitropack/types" {
   type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T
   interface InternalApi {
-    '/api/users/:id': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../Backend/server/api/users/[id].get').default>>>>
-    }
-    '/api/users/:id/favorite': {
-      'patch': Simplify<Serialize<Awaited<ReturnType<typeof import('../../Backend/server/api/users/[id]/favorite.patch').default>>>>
-    }
-    '/api/users': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../Backend/server/api/users/index.get').default>>>>
-    }
-    '/api/vkms/:id': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../Backend/server/api/vkms/[id].get').default>>>>
-    }
-    '/api/vkms': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../Backend/server/api/vkms/index.get').default>>>>
-    }
     '/__nuxt_error': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/handlers/renderer').default>>>>
     }
     '/__nuxt_island/**': {
-      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../Backend/server/#internal/nuxt/island-renderer').default>>>>
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/#internal/nuxt/island-renderer').default>>>>
     }
   }
 }

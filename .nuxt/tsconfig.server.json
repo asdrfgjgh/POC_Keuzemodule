@@ -18,10 +18,10 @@
         "./types/nitro-imports"
       ],
       "~/*": [
-        "../Frontend/*"
+        "../*"
       ],
       "@/*": [
-        "../Frontend/*"
+        "../*"
       ],
       "~~/*": [
         "../*"
@@ -114,7 +114,7 @@
     "../node_modules/dist/runtime/server",
     "../shared/**/*.d.ts",
     "./types/nitro.d.ts",
-    "../Backend/server/**/*"
+    "../server/**/*"
   ],
   "exclude": [
     "../node_modules",

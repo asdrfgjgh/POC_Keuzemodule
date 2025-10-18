@@ -10,16 +10,12 @@ import { RuntimeConfig as UserRuntimeConfig, PublicRuntimeConfig as UserPublicRu
       cdnURL: string,
    },
 
-   MONGODB_URI: string,
-
    nitro: {
       envPrefix: string,
    },
   }
   interface SharedPublicRuntimeConfig {
-   apiBase: string,
 
-   backendUrl: string,
   }
 declare module '@nuxt/schema' {
   interface RuntimeConfig extends UserRuntimeConfig {}

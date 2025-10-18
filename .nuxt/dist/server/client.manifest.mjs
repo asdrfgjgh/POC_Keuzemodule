@@ -1,18 +1,1 @@
-export default {
-  "@vite/client": {
-    "prefetch": true,
-    "isEntry": true,
-    "file": "@vite/client",
-    "css": [],
-    "module": true,
-    "resourceType": "script"
-  },
-  "C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/nuxt/dist/app/entry.async.js": {
-    "resourceType": "script",
-    "module": true,
-    "prefetch": true,
-    "preload": true,
-    "isEntry": true,
-    "file": "C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/nuxt/dist/app/entry.async.js"
-  }
-}
+export { default } from "file:///C:/Users/Tingp/GitHub/POC_Keuzemodule/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
