@@ -19,6 +19,22 @@ jobs:
         with:
           submodules: true
           lfs: false
+
+      # 🌟 STAP 1: Node.js 20.x instellen
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+
+      # 🌟 STAP 2: Dependencies installeren en Nuxt build uitvoeren
+      # Dit garandeert dat de .output/public en .output/server/functions mappen worden gevuld.
+      - name: Install dependencies and build Nuxt
+        working-directory: ./Frontend # Voer commando's uit in de Frontend map
+        run: |
+          npm install
+          npm run build
+
+      # 🌟 STAP 3: De gecreëerde mappen uploaden naar Azure Static Web Apps
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -26,16 +42,11 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          app_location: "Frontend" # App source code path (De './' is weggelaten, wat vaak voorkeur heeft)
-          # 🌟 OPLOSSING 1: De Nuxt/Nitro build plaatst de statische bestanden in deze map,
-          # RELATIEF ten opzichte van de app_location (Frontend).
-          output_location: ".output/public" # Built app content directory - optional
-          # 🌟 OPLOSSING 2: De Nitro server component moet als Azure Function worden ingezet.
-          # Dit is het pad dat Nitro creëert, RELATIEF ten opzichte van de app_location.
-          api_location: ".output/server/functions" # Api source code path - Dit is de Nuxt/Nitro server
+          app_location: "Frontend" # De root van de app-code
+          output_location: ".output/public" # Statische content van Nuxt/Nitro
+          api_location: ".output/server/functions" # De Nitro server (Azure Function)
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          # 🌟 TOEGEVOEGD: Forceer Node.js 20.x voor de API-build 🌟
           NODE_VERSION: "20.x"
 
   close_pull_request_job:
