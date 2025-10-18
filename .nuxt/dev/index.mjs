@@ -647,7 +647,10 @@ const _inlineRuntimeConfig = {
       }
     }
   },
-  "public": {},
+  "public": {
+    "apiBase": "https://apijobbahub.azurewebsites.net/api",
+    "backendUrl": "https://apijobbahub.azurewebsites.net"
+  },
   "MONGODB_URI": "mongodb+srv://Test:Test@testavans.jege5jk.mongodb.net/Avans"
 };
 const envOptions = {
@@ -1116,22 +1119,7 @@ const plugins = [
 _lSmG_M0iYRwD0ZA39O9LVvTAzCVbDjmhGX07tlG7NFs
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"15174-WpeO8Kyu5EZdXijpLCuqTA9axJ8\"",
-    "mtime": "2025-10-18T10:31:56.073Z",
-    "size": 86388,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"4e854-KMroitFuUi/INDBtYYZWnNCb83g\"",
-    "mtime": "2025-10-18T10:31:56.073Z",
-    "size": 321620,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));

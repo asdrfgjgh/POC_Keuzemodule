@@ -27,7 +27,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     MONGODB_URI: process.env.MONGODB_URI,
     public: {
-      // eventueel publieke runtime variabelen
+      // Backend API URL voor frontend
+      apiBase: process.env.API_BASE_URL || 'https://apijobbahub.azurewebsites.net/api',
+      backendUrl: process.env.BACKEND_URL || 'https://apijobbahub.azurewebsites.net'
     }
   }
 })

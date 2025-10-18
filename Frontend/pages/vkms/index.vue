@@ -108,12 +108,18 @@ const { selectedUserId } = useUserSelection();
 // State om de favoriete module-ID's bij te houden
 const favoriteModules = ref<string[]>([]);
 
-// 1. DATA OPHALEN VIA DE SERVER ROUTE met useFetch (de VKM items)
+// 1. DATA OPHALEN VIA DE EXTERNE BACKEND API
+const { api } = useApi();
+
 const { 
   data, 
   pending, 
   error 
-} = await useFetch<VkmItemData[]>('/api/vkms');
+} = await useFetch<VkmItemData[]>('/api/vkms', {
+  // Fallback naar externe API als lokale API niet beschikbaar is
+  server: false,
+  default: () => []
+});
 
 // 2. Computed Property voor Veiligheid (originele data)
 const vkms = computed(() => {

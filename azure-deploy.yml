@@ -1,85 +1,107 @@
-# Azure DevOps Pipeline voor Frontend + Backend deployment (Zonder Docker)
-trigger:
-  - main
+name: Build and Deploy Frontend + Backend to Azure
 
-pool:
-  vmImage: "ubuntu-latest"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
 
-variables:
-  azureServiceConnectionId: "your-service-connection-id"
-  webAppName: "keuzemodule"
-  resourceGroupName: "keuzemodule-rg"
+env:
+  AZURE_WEBAPP_NAME_FRONTEND: "keuzemodule-frontend"
+  AZURE_WEBAPP_NAME_BACKEND: "apijobbahub"
+  NODE_VERSION: "18.x"
 
-stages:
-  - stage: Build
-    displayName: "Build Stage"
-    jobs:
-      - job: BuildAndDeploy
-        displayName: "Build and Deploy Full Stack"
-        pool:
-          vmImage: "ubuntu-latest"
-        steps:
-          - task: NodeTool@0
-            inputs:
-              versionSpec: "18.x"
-            displayName: "Install Node.js"
+jobs:
+  build-and-deploy-frontend:
+    runs-on: ubuntu-latest
+    name: Build and Deploy Frontend
+    environment: "production"
 
-          - script: |
-              npm install
-              npm run build
-            displayName: "Build Application"
-            workingDirectory: "$(System.DefaultWorkingDirectory)"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-          - task: ArchiveFiles@2
-            inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
-              includeRootFolder: false
-              archiveType: "zip"
-              archiveFile: "$(Build.ArtifactStagingDirectory)/app.zip"
-            displayName: "Create deployment package"
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-          - task: PublishBuildArtifacts@1
-            inputs:
-              pathToPublish: "$(Build.ArtifactStagingDirectory)"
-              artifactName: "app"
+      - name: Install dependencies
+        run: |
+          npm install
+          npm ci
 
-  - stage: Deploy
-    displayName: "Deploy Stage"
-    dependsOn: Build
-    jobs:
-      - deployment: DeployFrontend
-        displayName: "Deploy Frontend"
-        environment: "production"
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureWebApp@1
-                  inputs:
-                    azureSubscription: "$(azureServiceConnectionId)"
-                    appType: "webApp"
-                    appName: "$(webAppName)-frontend"
-                    package: "$(Pipeline.Workspace)/app/app.zip"
-                    appSettings: |
-                      -NODE_ENV production
-                      -PORT 3000
-                      -WEBSITE_NODE_DEFAULT_VERSION 18.17.0
+      - name: Build application
+        run: |
+          npm run build
+        env:
+          BACKEND_URL: "https://apijobbahub.azurewebsites.net"
+          API_BASE_URL: "https://apijobbahub.azurewebsites.net/api"
 
-      - deployment: DeployBackend
-        displayName: "Deploy Backend"
-        environment: "production"
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureWebApp@1
-                  inputs:
-                    azureSubscription: "$(azureServiceConnectionId)"
-                    appType: "webApp"
-                    appName: "$(webAppName)-backend"
-                    package: "$(Pipeline.Workspace)/app/app.zip"
-                    appSettings: |
-                      -NODE_ENV production
-                      -PORT 3000
-                      -WEBSITE_NODE_DEFAULT_VERSION 18.17.0
-                      -MONGODB_URI "$(MONGODB_URI)"
+      - name: Create deployment package
+        run: |
+          zip -r frontend.zip .output -x "*.map"
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME_FRONTEND }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND }}
+          package: frontend.zip
+
+  build-and-deploy-backend:
+    runs-on: ubuntu-latest
+    name: Build and Deploy Backend
+    environment: "production"
+    if: false # Skip backend deployment omdat apijobbahub al bestaat
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npm ci
+
+      - name: Build application
+        run: |
+          npm run build
+
+      - name: Create deployment package
+        run: |
+          zip -r backend.zip . -x "node_modules/*" "*.git*" "*.md"
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME_BACKEND }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND }}
+          package: backend.zip
+
+  configure-cors:
+    runs-on: ubuntu-latest
+    name: Configure CORS
+    needs: build-and-deploy-frontend
+    if: always()
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Configure CORS for backend
+        run: |
+          az webapp cors add \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name ${{ env.AZURE_WEBAPP_NAME_BACKEND }} \
+            --allowed-origins "https://${{ env.AZURE_WEBAPP_NAME_FRONTEND }}.azurewebsites.net"
