@@ -11,8 +11,12 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: "keuzemodule-frontend"
-  # 🎯 FIX 1: Verhoog de Node.js versie naar 20.x
+  # FIX: Verhoog de Node.js versie naar 20.x, vereist door Nuxt/Vite packages.
   NODE_VERSION: "20.x"
+  # Backend naam voor de CORS configuratie job
+  AZURE_BACKEND_NAME: "apijobbahub"
+  # URL van de SWA, afgeleid van de AZURE_WEBAPP_NAME
+  FRONTEND_URL: "https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
 
 jobs:
   build-and-deploy:
@@ -25,37 +29,65 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        # Gebruik de nieuwste actie versie (v4 is aanbevolen)
+        # Gebruik v4 om de Node.js versie in te stellen.
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # 🎯 FIX 2: Gebruik alleen 'npm install' of 'npm ci', niet beide. 'npm ci' is beter voor CI/CD.
       - name: Install dependencies
+        # Gebruik 'npm ci' voor schone en betrouwbare installaties in CI/CD.
         run: npm ci
 
-      # 🎯 FIX 3: Installeer lokaal gebruikte binaries (zoals 'nuxt') om 'Permission denied' te voorkomen.
-      # De build stap wordt expliciet gemaakt om de lokale nuxt binary te gebruiken.
       - name: Build application
         run: |
-          # Voer de build uit met de lokale node_modules/.bin/nuxt
+          # npm run build gebruikt de lokale nuxt binary, wat 'Permission denied' voorkomt.
           npm run build
         env:
-          BACKEND_URL: "https://apijobbahub.azurewebsites.net"
-          API_BASE_URL: "https://apijobbahub.azurewebsites.net/api"
+          # Deze omgevingsvariabelen worden doorgegeven aan de build stap.
+          BACKEND_URL: "https://${{ env.AZURE_BACKEND_NAME }}.azurewebsites.net"
+          API_BASE_URL: "https://${{ env.AZURE_BACKEND_NAME }}.azurewebsites.net/api"
 
       - name: Create deployment package
-        # Zorg ervoor dat de output map correct is voor je framework (bijv. .output/public)
+        # Zorg ervoor dat '.output' de juiste map is voor jouw Nuxt build.
         run: |
-          # Deze stap is afhankelijk van de exacte output van 'npm run build'
-          # Controleer of '.output' de juiste map is
           zip -r app.zip .output -x "*.map"
+
+      # 🎯 FIX: Azure Login toevoegen VOOR de webapps-deploy actie.
+      - name: Azure Login for Deployment
+        uses: azure/login@v1
+        with:
+          # Gebruik de Service Principal credentials (JSON)
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          # Gebruik het publish profile als alternatief voor de login stap als deze faalt,
+          # maar de login stap is al toegevoegd als de standaard oplossing.
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: app.zip
 
-  # ... (De configure-cors job blijft hetzelfde)
+  # ----------------------------------------------------------------------------------------------------------------------
+
+  configure-cors:
+    runs-on: ubuntu-latest
+    name: Configure CORS
+    # Zorg dat de deployment succesvol is voordat CORS wordt geconfigureerd
+    needs: build-and-deploy
+    if: success()
+
+    steps:
+      - name: Azure Login for CORS Configuration
+        uses: azure/login@v1
+        with:
+          # Gebruik de Service Principal credentials (JSON)
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Configure CORS for backend (apijobbahub)
+        run: |
+          # De SWA URL (https://keuzemodule-frontend.azurewebsites.net) toevoegen aan de App Service CORS instellingen.
+          az webapp cors add \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name ${{ env.AZURE_BACKEND_NAME }} \
+            --allowed-origins ${{ env.FRONTEND_URL }}
