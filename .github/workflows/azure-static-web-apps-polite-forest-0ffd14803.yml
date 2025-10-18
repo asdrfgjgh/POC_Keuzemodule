@@ -26,9 +26,13 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          app_location: "./Frontend" # App source code path
-          api_location: "" # Api source code path - optional
+          app_location: "Frontend" # App source code path (De './' is weggelaten, wat vaak voorkeur heeft)
+          # 🌟 OPLOSSING 1: De Nuxt/Nitro build plaatst de statische bestanden in deze map,
+          # RELATIEF ten opzichte van de app_location (Frontend).
           output_location: ".output/public" # Built app content directory - optional
+          # 🌟 OPLOSSING 2: De Nitro server component moet als Azure Function worden ingezet.
+          # Dit is het pad dat Nitro creëert, RELATIEF ten opzichte van de app_location.
+          api_location: ".output/server/functions" # Api source code path - Dit is de Nuxt/Nitro server
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
           # 🌟 TOEGEVOEGD: Forceer Node.js 20.x voor de API-build 🌟
