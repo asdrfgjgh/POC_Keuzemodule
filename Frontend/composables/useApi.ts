@@ -5,7 +5,7 @@ export const useApi = () => {
   const config = useRuntimeConfig()
   
   // Backend URL ophalen uit runtime config
-  const backendUrl = config.public.backendUrl || 'http://localhost:3000'
+  const backendUrl = config.public.backendUrl || 'http://localhost:3001'
   const apiBase = config.public.apiBase || `${backendUrl}/api`
   
   // Helper functie voor API calls
